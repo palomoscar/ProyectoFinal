@@ -1,0 +1,62 @@
+<html>
+	<head> 
+	
+	<title>Formulario de Registro</title>
+	<script src="Quiz-2.0/js/validaciones_cliente.js"></script>
+	<meta name="author" content="Oscar y Miguel">
+	<meta name="description" content="Formulario de registro de usuarios">
+			
+	</head>
+	<body>
+		<h2>Formulario de Registro</h2> 
+		<form id='registro' name='formulario' onSubmit= "return validar()" action = "registro.php" method = "post" > 
+			<table>
+				<tr>
+					<td>Nombre*: </td> <td>
+					<input type="text" id = "nombre" name="nombre"> </td>
+					<td>Nickname*: </td> <td>
+					<input type="text" id = "nick" name="nick" size="10"> </td>
+				</tr>				
+				<tr>
+					<td>Apellidos*: </td> <td>
+					<input type="text" id = "apellidos" name="apellidos"> </td>
+					<td>Contrase&ntildea*: </td> <td>
+					<input type = "password"   id = "pass" name= "pass"> </td>
+				</tr>
+				<tr>
+					<td>Email*: </td> <td>
+					<input type="text"  id = "mail" name="mail"> </td>
+					<td>Confirmar contrase&ntildea*: </td> <td>
+					<input type = "password" id = "pass2" name= "pass2"> </td>
+				</tr>
+				<tr>
+					<td>Sexo: </td> <td>
+					<select name="sexo" id = "sexo" size="1">
+					<option>Hombre</option>
+					<option>Mujer</option>
+					<option>Otro</option>
+					</select> </td>
+					<td>N&uacutemero de tel&eacutefono*:</td> <td>
+					<input type="number" id = "telf" name="telf" size="9"> </td>
+				</tr>
+				<tr>
+				<td>Especialidad*: </td> <td>
+					<select name="esp"  id = "esp" size="1">
+					<option>Ing. del Software</option>
+					<option>Ing. de Computadores</option>
+					<option>Computaci&oacuten</option>
+					</select> </td>
+				</tr>
+				<tr>
+				</tr>
+				<tr>
+				</tr>
+				
+				<tr><td><input type="submit" value="Registrarse" ></input></td>
+				<tr><td><input type="reset" value="Borrar" ></input></td>
+			
+				</tr>
+		</table>
+		</form>
+		</body>
+		</html>
