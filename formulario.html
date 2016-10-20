@@ -2,14 +2,32 @@
 	<head> 
 	
 	<title>Formulario de Registro</title>
+	
+	<style type="text/css">
+	body {
+    color: #3c464f;
+    background-color: #8bbcea; }
+	  .boton{
+        font-size:10px;
+        font-weight:bold;
+        color:white;
+        background:#638cb5;
+        border:0px;
+        width:80px;
+        height:25px;
+       }
+	</style>
 	<script src="Quiz-2.0/js/validaciones_cliente.js"></script>
 	<meta name="author" content="Oscar y Miguel">
 	<meta name="description" content="Formulario de registro de usuarios">
+	
 			
 	</head>
+
 	<body>
 		<h2>Formulario de Registro</h2> 
 		<form id='registro' name='formulario' onSubmit= "return validar()" action = "registro.php" method = "post" > 
+			<hr/>
 			<table>
 				<tr>
 					<td>Nombre*: </td> <td>
@@ -50,11 +68,12 @@
 				<tr>
 				</tr>
 				<tr>
-				</tr>
+				</tr>	
+				<tr><td>                      </td>
+				<td><input type="submit" class = "boton" value="Registrarse" ></input></td>
+				<tr><td>                      </td>
+				<td><input type="reset" class="boton" value="Borrar" ></input></td>
 				
-				<tr><td><input type="submit" value="Registrarse" ></input></td>
-				<tr><td><input type="reset" value="Borrar" ></input></td>
-			
 				</tr>
 		</table>
 		</form>

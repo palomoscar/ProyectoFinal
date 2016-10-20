@@ -2,10 +2,10 @@
 
 
 	//conexion remota
-	$conexion = mysqli_connect("mysql.hostinger.es","u204349316_root","gabriel3","u204349316_users") or die( mysql_error() );
+	//$conexion = mysqli_connect("mysql.hostinger.es","u204349316_root","gabriel3","u204349316_users") or die( mysql_error() );
 		
 	//conexion local
-	 //$conexion = mysqli_connect("localhost","root",'',"usuario") or die( mysql_error() );
+	 $conexion = mysqli_connect("localhost","root",'',"usuario") or die( mysql_error() );
 		
  
 	if(!$conexion){
@@ -65,7 +65,7 @@
 		
 			echo "<p> <a href='formulario.html'> Volver al registro </a>";
 			
-			die('Se ha aortad oa ejecucion de programa' );
+			die('Se ha abortado la ejecucion del programa' );
 		
 		}if( !comprobarPass()){
 			
@@ -73,7 +73,7 @@
 		
 			echo "<p> <a href='formulario.html'> Volver al registro </a>";
 			
-			die('Se ha aortad oa ejecucion de programa' );
+			die('Se ha abortado la ejecucion de programa' );
 			
 			
 		}else{ //EN CASO DE QUE TODO HAYA IDO BIEN
@@ -89,6 +89,8 @@
 			echo "¡Usuario registrado con exito!";
 		
 			echo "<p> <a href='VerUsuarios.php'> VER USUARIOS </a>";
+			
+			echo "<p> <a href='layout.html'> INICIO </a>";
 		
 			mysqli_close($conexion);
 		

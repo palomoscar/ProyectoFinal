@@ -7,11 +7,9 @@
 	
 	//conexion local
 	
-	//$mysqli = mysqli_connect("localhost", "root","","usuario") or die (mysql_error());
+	$mysqli = mysqli_connect("localhost", "root","","usuario") or die (mysql_error());
 	
-	//conexion remota
-	
-	$mysqli = mysqli_connect("mysql.hostinger.es","u204349316_root","gabriel3","u204349316_users") or die( mysql_error() );
+
 		
 
 
@@ -27,7 +25,6 @@
 		<th> Nombre </th>
 		<th> Apellidos </th>
 		<th> Nickname </th>
-		<th> Password </th>
 		<th> Email </th>		
 		<th> Telefono </th>
 		<th> Sexo </th>
@@ -40,7 +37,6 @@
 					  <td>'.$row['Nombre'].'</td>
 					  <td>'.$row['Apellidos'].'</td>
 					  <td>'.$row['Nickname'].'</td>
-					  <td>'.$row['Clave'].'</td>
 					  <td>'.$row['Email'].'</td>
 					  <td>'.$row['Telefono'].'</td>
 					  <td>'.$row['Sexo'].'</td>
@@ -49,9 +45,7 @@
 			
 		}
 		echo '</table>';
-		
-		//$usuarios->close();
-		
+
 		mysqli_close( $mysqli );
 	
 ?>

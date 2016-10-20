@@ -2,13 +2,13 @@
 * 						{margin: 0; padding: 0;}
 body						{font: 16px Georgia, serif;}
 
-#page-wrap				{margin: 2% auto; color: white;}
+#page-wrap				{margin: 2% auto; color: grey;}
 #page-wrap >.main 		{border: 1px solid #999; padding: 1%;
-						 margin-bottom: 1px; color: black;}
+						 margin-bottom: 1px; color:  #244d72 ;}
 
 section > div				{padding: 20px;}
-header, nav, section		{background: #eee; text-align: center;}
-footer					{background: #eee; text-align: center;}
+header, nav, section		{background:  #83c4b1 ; text-align: center;}
+footer					{background:  #47a0e6 ; text-align: center;}
 nav span             				{ margin: 0px 10px 0px 0px;
 						width: 100%;
 						display: inline-block;}

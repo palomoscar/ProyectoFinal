@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -13,6 +14,7 @@
 		   type='text/css' 
 		   media='only screen and (max-width: 480px)'
 		   href='estilos/smartphone.css' />
+		  
   </head>
   <body>
   <div id='page-wrap'>
@@ -21,22 +23,66 @@
       		<span class="right"><a href="login.php">Login</a></span>
       		<span class="right" style="display:none;"><a href="/logout">Logout</a></span>
 		<h2>Quiz: el juego de las preguntas</h2>
+		<br></br>
+		<p><a href= "InsertarPregunta.php" target="_blank">Ingresa otra pregunta</a></p>
     </header>
 	<nav class='main' id='n1' role='navigation'>
 		<span><a href='layout.html'>Inicio</a></span>
-		<span><a href='VerPreguntas.php'>Preguntas</a></span>
 		<span><a href='creditos.html'>Creditos</a></span>
 	</nav>
     <section class="main" id="s1">
     
 	<div>
-	Bienvenidos a QUIZ, el juego de las preguntas
-	<br></br>
-	Estamos tratando de que puedas logearte con tanto con tu email como con tu nick. De momento puedes hacerlo,
-	<br></br>
-	pero no esperes que la pregunta que registres se asocie a tu cuenta, pues tenemos problemas al asociar el 
-	<br></br>
-	nick con el email. Intentaremos solucionar esto cuanto antes. Disculpen las molestias.
+	<center>
+	
+	<?php
+
+
+	//conexion remota------->cambiarla!!!!!!!!!!
+
+	//$mysqli = mysqli_connect("mysql.hostinger.es"," 	u204349316_oscar","gabriel3", "u204349316_preg" ) or die(mysql_error());
+	
+	//conexion local
+	
+	$mysqli = mysqli_connect("localhost", "root","","preguntas") or die (mysql_error());
+
+		if (!$mysqli) {
+	 
+			echo "Fallo al conectar a MySQL: " . $mysqli->connect_error;
+
+		}
+
+	$preguntas = mysqli_query($mysqli, "select * from preguntas" ) or die( mysql_error() );
+
+		echo '<table border=1> <tr> 
+		<th> Email </th>
+		<th> Pregunta </th>
+		<th> Respuesta </th>
+		<th> Dificultad </th>
+		</tr>';
+		
+		while( $row = mysqli_fetch_array($preguntas) ){
+			echo '<tr>
+					  <td>'.$row['Email'].'</td>
+					  <td>'.$row['Pregunta'].'</td>
+					  <td>'.$row['Respuesta'].'</td>
+					  <td>'.$row['Dificultad'].'</td>
+				 </tr>';
+			
+		}
+		echo '</table>';
+		
+		echo "<br></br>";
+		
+		echo "<center>";
+		
+		
+		
+		mysqli_close( $mysqli );
+	
+?>
+	<br></br><br></br>
+	
 	</div>
     </section>
 	<footer class='main' id='f1'>
