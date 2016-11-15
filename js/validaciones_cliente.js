@@ -127,7 +127,6 @@
 				if( error == 1){
 					return false;
 				}
-				
-				alert("¡Se han copiado los datos a la BD!");
+
 				return true;
 			}

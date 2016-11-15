@@ -1,15 +1,24 @@
-<!DOCTYPE html>
-	 
-<html>
 
-	<head>
-	 <title>Login</title>
-	 <style type="text/css">
-		body {
-		color: #3c464f;
-		background-color: #8bbcea; }
-		.boton{
-        font-size:10px;    
+<!DOCTYPE html>
+<html>
+  <head>
+  
+    <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
+	<title>LOGIN</title>
+    <link rel='stylesheet' type='text/css' href='estilos/style.css' />
+	<link rel='stylesheet' 
+		   type='text/css' 
+		   media='only screen and (min-width: 530px) and (min-device-width: 481px)'
+		   href='estilos/wide.css' />
+	<link rel='stylesheet' 
+		   type='text/css' 
+		   media='only screen and (max-width: 480px)'
+		   href='estilos/smartphone.css' />
+		   
+	<style type="text/css">
+
+	  .boton{
+        font-size:10px;
         font-weight:bold;
         color:white;
         background:#638cb5;
@@ -18,87 +27,81 @@
         height:25px;
        }
 	</style>
-	 <meta charset = "utf-8">
-	</head>
-	
-	<body>
-	
-	<center>
-	
-	<h1>Acceso para Usuarios</h1>
-	
-	<hr/>
+  </head>
+  <body>
+  <div id='page-wrap'>
+	<header class='main' id='h1'>
+		
+		<span class="right">¿Aun sin cuenta? <a href="registro.php">Registrate</a></span>
 
-	<form  id = "login" name "login" action="login.php" method="post" >
+		<h2>Quiz: el juego de las preguntas</h2>
+    </header>
+	<nav class='main' id='n1' role='navigation'>
+		<span><a href='layout.html'>Inicio</a></span>
+		<span><a href='VerPreguntas.php'>Preguntas</a></span>
+		<span><a href='creditos.html'>Creditos</a></span>
+	</nav>
+    <section class="main" id="s1">
+    
+	<div>
+
+		<center>
+	
+		<h1>Acceso para Usuarios</h1>
+	
+	
+		<form  id = "login" name "login" action="login.php" method="post" >
 
 	
-	<label>Nombre  de Usuario o Email :</label><br>
+		<label>Email :</label><br>
 	
-	<input name="username" type="text" id="username" required>
+		<input name="username" type="text" id="username" required>
 	
 	
-	<br><br>
+		<br><br>
 
-	<label>Password:</label><br>
+		<label>Password:</label><br>
 
-	<input name="pass" type="password" id="pass" required>
+		<input name="pass" type="password" id="pass" required>
 
-	<br><br>
+		<br><br>
 
-	<input type="submit" name="Submit" class = "boton" value="LOGIN">
+		<input type="submit" name="Submit" class = "boton" value="LOGIN">
 	
-	</center>
+		</center>
 
-	</form>
-
+		</form>
+	
+	</div>
+	
+    </section>
+	<footer class='main' id='f1'>
+	
+		<p><a href="http://es.wikipedia.org/wiki/Quiz" target="_blank">Que es un Quiz?</a></p>
+		<a href='https://github.com'>Link GITHUB</a>
+		
+	</footer>
+	
+	</div>
+	</body>
 </html>
+
 
 <?php
 
 	//PRIMERO ESTABLECEREMOS LAS CONEXIONES	
 	
-	//En local
-	
-	$host = "localhost";
-	$user = "root";
-	$password = "";
-	$dbname = "usuario";
-	
-	
-	//En hostinger
-	/*$host = "mysql.hostinger.es";
-	$user = "";
-	$password = "";
-	$dbname = "";
-	*/
-	
-	$mysqli = mysqli_connect($host, $user, $password, $dbname);
-	
-	if ($mysqli->connect_errno)
-	{
-		die ( 'Error al conectar con la Base de Datos' . mysqli_connect_error() . PHP_EOL);
-		
-	}
-	
-		session_start();//PARA CUANDO HAGAMOS LA OPCINAL Y LE METAMOS TIMERS Y ESO
-		
-		//comprobaciones en el lado servidor
+		include("./conexionbd.php");
 
-		if(empty($_POST['username'])){
+		session_start();
+
+		if( empty($_POST['username']) || empty($_POST['pass']) ){
 		
 		die( '' );
 		
-		}if(empty($_POST['pass'])){
-			
-		die('Inserte una contraseña');
-	
 		}
-			
-		if(empty($_POST['username']) && empty($_POST['pass'])){
-			
-		die('Inserte una dirección de correo y una contraseña');
 		
-		}
+		
 		
 		function comprobarMail(){
 	
@@ -109,55 +112,31 @@
 		}
 		
 	
-		//parametros que tomamos del login
-	
-		//si no concuerda con la expresion regular es que el usuario intenta logearse con el nickname y no con el mail
+		if( strcmp($_POST['username'], "web000@ehu.es") != 0 && !comprobarMail()  ){
+			
+			die("Error de identificacion, revisa los datos que has introducido");
 		
-		$password = $_POST['pass'];
-	
-		if( !comprobarMail() ){ //FALTA IMPLEMENTAR BIEN, EL QUERY NO NOS EXTRAE BIEN EL CAMPO MAIL ASOCIADO AL NICK
-			
-			$nick = $_POST['username'];//si entramos aqui es que hemos logueado con el nick
-			
-			//$usuarios = mysqli_query($mysqli, "select Email from usuario WHERE Nickname  ='$nick' " );
-			
-			$query= mysqli_query( $mysqli, "SELECT Email FROM usuario WHERE Nickname  ='$nick' AND Clave = '$password'" ) ; //guardamos el mail asociado a ese nick 
-			
-			//CREO QUE $email TENDRIA EL BOOLEANO CORRESPONDIENTE A LA EJECUCION --> USAR METODO PARA EXTRAER EL MAIL ASOCIADO
-			
-			$email = mysqli_fetch_array($query); // aqui email es un array != string
-			
-			$flag = true;
-			
-		}if( comprobarMail() ){
-			
+		}	
 			$email =  $_POST['username'];
-			$query = mysqli_query($mysqli, "SELECT * FROM usuario WHERE Email  ='$email' AND Clave = '$password' ");
 			
-			$flag = false;
-		
-		}
-		
-		
-		
-		//hacer con asterisco y luego extraer el mail del row asociado !!!
-		
-		if( mysqli_num_rows($query) > 0){
+			$pass = $_POST['pass'];
 			
-			if( $flag ){ // en caso de que hayamos usado el fetch array 
+			$result = mysqli_query($mysqli, "SELECT * FROM usuario WHERE Email = '$email' AND Clave = '$pass'" );
+			
+			$cont = mysqli_num_rows($result);
 				
-				$_SESSION['user']= serialize($email); //convertir el array a string; ---> PROBLEMA: escribe basura, entre la cual esta el email asociado (vamos mejorando)
+		if(  $cont > 0 ){ //si hay una o mas lineas que coincidan --> esta en la BD --> acierto
 				
-			}else{
+				$_SESSION['user'] = $email;
+			
+				$_SESSION['pass'] = $password;
 				
-				$_SESSION['user']=$email;
-			}
-			
-			$_SESSION['pass']=$password;
-			
-			header("location: InsertarPregunta.php");//redireccionamos
-			
-			
+				if( strcmp($email, "web000@ehu.es") == 0){
+					header("location: RevisarPreguntas2.php");
+				}else{
+					header("location: GestionPreguntas.php");
+				}
+				
 		}else{
 			
 			echo "<center>";
@@ -166,13 +145,13 @@
 			
 			echo "<br></br>";	
 			
-			die("Error de identificacion, revisa los datos introducidos");//seria mejor con js...
+			die("Error de identificacion, revisa los datos introducidos");
+			
+			echo "</center>";
 			
 		
 		}
 		
 		mysqli_close($mysqli);
-		
-		
 			
 ?>

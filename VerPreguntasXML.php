@@ -3,12 +3,12 @@
   <head>
   
     <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
-	<title>Preguntas</title>
+	<title>VerPreguntasXML</title>
     <link rel='stylesheet' type='text/css' href='estilos/style.css' />
 	<link rel='stylesheet' 
 		   type='text/css' 
 		   media='only screen and (min-width: 530px) and (min-device-width: 481px)'
-		   href='estilos/wide.css' />
+		   href='estilos/wide3.css' />
 	<link rel='stylesheet' 
 		   type='text/css' 
 		   media='only screen and (max-width: 480px)'
@@ -18,7 +18,7 @@
   <div id='page-wrap'>
 	<header class='main' id='h1'>
 		<span class="right"><a href="registro.php">Registrarse</a></span>
-      		<span class="right"><a href="login.php">Login</a></span>
+                <span class="right"><a href="Logout.php">Logout</a></span>
 		<h2>Quiz: el juego de las preguntas</h2>
     </header>
 	<nav class='main' id='n1' role='navigation'>
@@ -29,22 +29,32 @@
     <section class="main" id="s1">
     
 	<div>
-	Bienvenidos a QUIZ, el juego de las preguntas.
-	<br></br>
-	Si solo quieres visualizar las preguntas no es necesario que te registres.
-	<br></br>
-	Para ingresarlas debes ser un alumno matriculado en la asignatura de Sistemas Web
-	<br></br>
-	debes haberte registrado previamente.
-	<br></br>
-	Te invitamos a que nos conozcas pinchando sobre los "Creditos". ¡Un saludo!
+	<center>
 	
+	<?php 		
+			
+	$preguntas = simplexml_load_file("preguntas.xml");
+
+	echo '<table border=1> <tr> 
+		<th> Tematica </th>
+		<th> Enunciado </th>
+		<th> Complejidad </th>
+		</tr>';
+	foreach($preguntas as $pregunta){
+      echo '<tr>
+		<th>'. $pregunta['subject'] . '</th>
+		<th>' . $pregunta->itemBody->p . '</th>
+		<th>' . $pregunta['complexity'] . '</th>
+		</tr>';
+	}
+   
+	?>
+	
+	</center>
+
 	</div>
     </section>
-	<footer class='main' id='f1'>
-		<p><a href="http://es.wikipedia.org/wiki/Quiz" target="_blank">Que es un Quiz?</a></p>
-		<a href='https://github.com'>Link GITHUB</a>
-	</footer>
+	
 </div>
 </body>
 </html>

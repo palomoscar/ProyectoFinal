@@ -1,0 +1,50 @@
+
+	<!DOCTYPE HTML>
+		
+	<html>
+	
+	<head>
+	
+	<meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
+	
+	<title>Revisar Ajax</title>
+	
+	</head>
+	
+	<body>
+
+	<form id = "form_pregunta" name = "form_pregunta"  method="post" action = "Revisar_Ajax.php">
+	
+	<center>
+	
+		<table>
+		<tr>
+		<td>Pregunta : </td> <td> <TEXTAREA rows="3" cols="30" maxlength="50" id = "pregunta" name="pregunta" required ></TEXTAREA></td>
+		</tr>
+		<td></td><td></td>
+		<tr>
+		<td>Respuesta: </td> <td> <input type="text" id = "respuesta" name="respuesta" required></td>
+		</tr>
+		<td></td><td></td>
+		<tr>
+		<td>Tema: </td> <td> <input type="text" id = "tema" name="tema" required></td>
+		</tr>
+		<td></td><td></td>
+		<tr>
+		<td>Elige un grado de dificultad : </td> <td> 
+		<select name="dificultad" id = "dificultad" size="1" required>
+							<option value="0">Seleccione dificultad</option>
+						  	<option value="1">1</option>
+						    <option value="2">2</option>
+						    <option value="3">3</option>
+						    <option value="4">4</option>
+						    <option value="5">5</option>
+		</select></td>
+		</tr>
+		</table>	
+		<input type="submit" name="insertar"  class = "boton" value="Modificar" ></input>
+
+	</center>
+	</form>
+	</body>
+	</html>

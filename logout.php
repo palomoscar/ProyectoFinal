@@ -1,14 +1,13 @@
+
 <?php
-session_write_close();
 
-echo "<p> <a href='layout.html'> INICIO </a>";
-
-echo "<p> <a href='VerPreguntas.php'> VER PREGUNTAS </a>";
-
-echo "  ";
-
-die ("¡ESPERAMOS VOLVER A VERTE PRONTO!");
-
-
-
+	session_start();
+	
+	$_SESSION = array();
+	
+	session_unset();
+	
+	session_destroy();
+	
+	header("location: ./login.php");
 ?>

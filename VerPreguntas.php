@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -24,7 +23,7 @@
       		<span class="right" style="display:none;"><a href="/logout">Logout</a></span>
 		<h2>Quiz: el juego de las preguntas</h2>
 		<br></br>
-		<p><a href= "InsertarPregunta.php" target="_blank">Ingresa otra pregunta</a></p>
+		<p><a href= "GestionPreguntas.php" target="_blank">Ingresa otra pregunta</a></p>
     </header>
 	<nav class='main' id='n1' role='navigation'>
 		<span><a href='layout.html'>Inicio</a></span>
@@ -37,20 +36,7 @@
 	
 	<?php
 
-
-	//conexion remota------->cambiarla!!!!!!!!!!
-
-	//$mysqli = mysqli_connect("mysql.hostinger.es"," 	u204349316_oscar","gabriel3", "u204349316_preg" ) or die(mysql_error());
-	
-	//conexion local
-	
-	$mysqli = mysqli_connect("localhost", "root","","preguntas") or die (mysql_error());
-
-		if (!$mysqli) {
-	 
-			echo "Fallo al conectar a MySQL: " . $mysqli->connect_error;
-
-		}
+        include("./conexionbd.php");
 
 	$preguntas = mysqli_query($mysqli, "select * from preguntas" ) or die( mysql_error() );
 

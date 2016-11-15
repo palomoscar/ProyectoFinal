@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<assessmentItems>
+	<assessmentItem complexity="2" subject="Las movidas de Adri">
+		<itemBody>
+			<p>¿QUE ES LO MEJOR DEL MUNDO?</p>
+		</itemBody>
+		<correctResponse>
+			<value>
+				HACER MOVIDAS
+			</value>
+		</correctResponse>
+	</assessmentItem>
+		<assessmentItem complexity="4" subject="La higiene de Adri">
+		<itemBody>
+			<p>¿Cada cuanto se ducha Adrian?</p>
+		</itemBody>
+		<correctResponse>
+			<value>
+				Cada año bisiesto
+			</value>
+		</correctResponse>
+		</assessmentItem>
+</assessmentItems>

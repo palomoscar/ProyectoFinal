@@ -1,18 +1,153 @@
+<!DOCTYPE HTML>
+
+<html>
+
+	
+			
+	</head>
+
+	<body>
+
+		<!--DIV PARA LA RESPUESTA DEL AJAX!-->
+		<div id = "divMail" ></div>
+		<div id = "divContrasenya" ></div> 
+	</body>
+</html>
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+  
+	<title>Formulario de Registro</title>
+	
+	<style type="text/css">
+	body {
+    color: #3c464f;
+    background-color: #8bbcea; }
+	  .boton{
+        font-size:10px;
+        font-weight:bold;
+        color:white;
+        background:#638cb5;
+        border:0px;
+        width:80px;
+        height:25px;
+       }
+	</style>
+	<script src="http://swmiguel.esy.es/ProyectoQuiz/js/validaciones_cliente.js"></script>
+	<meta name="author" content="Oscar y Miguel">
+	<meta name="description" content="Formulario de registro de usuarios">
+  
+    <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
+
+    <link rel='stylesheet' type='text/css' href='estilos/style.css' />
+	<link rel='stylesheet' 
+		   type='text/css' 
+		   media='only screen and (min-width: 530px) and (min-device-width: 481px)'
+		   href='estilos/wide.css' />
+	<link rel='stylesheet' 
+		   type='text/css' 
+		   media='only screen and (max-width: 480px)'
+		   href='estilos/smartphone.css' />
+  </head>
+  <body>
+  <div id='page-wrap'>
+	<header class='main' id='h1'>
+
+      		<span class="right"><a href="login.php">Login</a></span>
+		<h2>Quiz: el juego de las preguntas</h2>
+    </header>
+	<nav class='main' id='n1' role='navigation'>
+		<span><a href='layout.html'>Inicio</a></span>
+		<span><a href='VerPreguntas.php'>Preguntas</a></span>
+		<span><a href='creditos.html'>Creditos</a></span>
+	</nav>
+    <section class="main" id="s1">
+    
+	<div>
+	
+			<h2>Formulario de Registro</h2>
+
+		<center>
+		<form id='registro' name='formulario' onSubmit= "return validar()" action = "registro.php" method = "POST" > 
+			<hr/>
+			<table>
+				<tr>
+					<td>Nombre*: </td> <td>
+					<input type="text" id = "nombre" name="nombre"> </td>
+					<td>Nickname*: </td> <td>
+					<input type="text" id = "nick" name="nick" size="10"> </td>
+				</tr>				
+				<tr>
+					<td>Apellidos*: </td> <td>
+					<input type="text" id = "apellidos" name="apellidos"> </td>
+					<td>Contrase&ntildea*: </td> <td>
+					<input type = "password"   id = "pass" name= "pass" > <!--onchange = "contrasenyaAJAX()"-->  </td>
+				</tr>
+				<tr>
+					<td>Email*: </td> <td>
+					<input type="text"  id = "mail" name="mail" > <!--onchange = "mailAJAX()"--> </td>
+					<td>Confirmar contrase&ntildea*: </td> <td>
+					<input type = "password" id = "pass2" name= "pass2"> </td>
+				</tr>
+				<tr>
+					<td>Sexo: </td> <td>
+					<select name="sexo" id = "sexo" size="1">
+					<option>Hombre</option>
+					<option>Mujer</option>
+					<option>Otro</option>
+					</select> </td>
+					<td>N&uacutemero de tel&eacutefono*:</td> <td>
+					<input type="number" id = "telf" name="telf" size="9"> </td>
+				</tr>
+				<tr>
+				<td>Especialidad*: </td> <td>
+					<select name="esp"  id = "esp" size="1">
+					<option>Ing. del Software</option>
+					<option>Ing. de Computadores</option>
+					<option>Computaci&oacuten </option>
+					</select> </td>
+				</tr>
+				<tr>
+				</tr>
+				<tr>
+				</tr>	
+				<tr><td>                      </td>
+				<td><input type="submit" class = "boton" value="Registrarse" ></input></td>
+				
+				<td><input type="reset" class="boton" value="Borrar" ></input></td>
+				
+				</tr>
+		</table>
+		</form>
+		</center>
+	
+	</div>
+    </section>
+	<footer class='main' id='f1'>
+		<p><a href="http://es.wikipedia.org/wiki/Quiz" target="_blank">Que es un Quiz?</a></p>
+		<a href='https://github.com'>Link GITHUB</a>
+	</footer>
+</div>
+</body>
+</html>
+
+
+
+
 <?php
 
+	require_once('lib/nusoap.php');
+	
+	require_once('lib/class.wsdlcache.php');
 
-	//conexion remota
-	//$conexion = mysqli_connect("mysql.hostinger.es","u204349316_root","gabriel3","u204349316_users") or die( mysql_error() );
-		
-	//conexion local
-	 $conexion = mysqli_connect("localhost","root",'',"usuario") or die( mysql_error() );
-		
- 
-	if(!$conexion){
-		
-		echo "Fallo al conectar con MySQL : " . $conexion->connect_error;
-		
-	}
+	//las comprobaciones se haran una vez rellenados los campos
+
+	if( isset($_POST['nombre'])&& isset($_POST['apellidos']) && isset($_POST['nick'])&& isset($_POST['pass']) && isset($_POST['mail'])&& isset($_POST['telf']) && isset($_POST['sexo'])&& isset($_POST['esp']) ){
+	
+	include("./conexionbd.php");
+	
 	
 	//extraemos los valores introducidos y los guardamos en variables para trabajar mas facil
 	
@@ -25,9 +160,36 @@
 		$sexo = $_POST['sexo'];
 		$esp = $_POST['esp'];
 	
-	//AHORA ESCRIBIREMOS LAS FUNCIONES QUE SE UTILIZARAN PARA VALIDAR LOS DATOS POR PARTE DEL SERVIDOR//
+	///////////////////////////////////quitar los onchange////////////////////
 	
-	//A MEDIDA QUE VAYAN FUNCIONANDO SE AÑADIRAN MAS VALIDACIONES//
+	
+	$soapclient1 = new nusoap_client('http://cursodssw.hol.es/comprobarmatricula.php?wsdl',true);
+
+	$result1 = $soapclient1->call('comprobar', array('x'=>$_POST['mail']));
+
+	$soapclient2 = new nusoap_client("http://swmiguel.esy.es/ProyectoQuiz/ComprobarContrasenya.php?wsdl",true);
+
+	$result2 = $soapclient2->call('passVal', array('password'=>$_POST['pass']));
+	
+	//NO HAREMOS COMPROBACIONES SI EL MAIL ES INCORRECTO
+	
+		if( $result1 != "SI" ){
+		
+		 echo "<script languaje='javascript'>alert('DEBES ESTAR MATRICULAD PARA REGISTRARTE ')</script>";
+		 
+		 die('');
+		
+		}
+	
+		if( $result2 != "VALIDA"){
+		
+		echo "<script languaje='javascript'>alert('INTRODUZCA UNA CNTRASEÑA MAS SEGURA')</script>";
+		 
+		die('');
+		
+		}
+
+	//SI PASA DE AQUI COMENZAMOS A COMPROBAR EL RESTO
 	
 		function comprobarDatos(){
 		
@@ -45,12 +207,18 @@
 			
 			$okay = true;
 		
-			if(strlen($_POST['pass']) < 6 || $_POST['pass'] != $_POST['pass2'] ){
+			if(strlen($_POST['pass']) <= 6  ){
 			
 				$okay = false;
 			
-				echo "<p><a id='parUsers'>Revisa las contraseñas, tu contraseña debe tener al menos 6 caracteres</a> ";	
+				echo "<p><a id='parUsers'>Tu contraseña debe tener al menos 6 caracteres</a> ";	
 			
+			}if( $_POST['pass'] != $_POST['pass2']){
+				
+				$okay = false;
+				
+				echo "<p><a id='parUsers'>ERROR: Tus contraseñas no coinciden </a> ";	
+				
 			}
 		
 			return $okay;
@@ -59,40 +227,46 @@
 		
 		//AHORA SEGUIREMOS CON LAS LINEAS QUE SE EJECUTAN PARA REALIZAR LAS VALIDACIONES
 		
-		if( !comprobarDatos() ){ // EN CASO DE ERRORES
+		//VAMS A COMENTAR --> AHRA LO HACE EL SW!!!!!!!!
+		
+		/*if( !comprobarDatos() ){ // EN CASO DE ERRORES
 		
 			echo "El correo utilizado no es valido";
 		
-			echo "<p> <a href='formulario.html'> Volver al registro </a>";
+			echo "<p> <a href='registro.php'> Volver al registro </a>";
 			
 			die('Se ha abortado la ejecucion del programa' );
 		
-		}if( !comprobarPass()){
-			
-			echo "La contraseña utilizada no es valida";
+		}*/if( !comprobarPass()){
 		
-			echo "<p> <a href='formulario.html'> Volver al registro </a>";
+			echo "<p> <a href='registro.php'> Volver al registro </a>";
 			
 			die('Se ha abortado la ejecucion de programa' );
 			
 			
-		}else{ //EN CASO DE QUE TODO HAYA IDO BIEN
+		}
+		//EN CASO DE QUE TODO HAYA IDO BIEN
 			
 			 $sql = "INSERT INTO usuario(Nombre,Apellidos,Nickname,Clave,Email,Telefono,Especialidad) VALUES('$nombre','$apellidos','$nick','$pass','$mail',$telf,'$esp')";
 	
-			if(!mysqli_query($conexion ,$sql)){
+			if(!mysqli_query($mysqli ,$sql)){
 		
-				die('Error al escribir en la Base de Datos: ' . mysql_error());
+				die('' . mysql_error());
 				
 			}
+			
+			echo "<center>";
 	
 			echo "¡Usuario registrado con exito!";
 		
 			echo "<p> <a href='VerUsuarios.php'> VER USUARIOS </a>";
 			
-			echo "<p> <a href='layout.html'> INICIO </a>";
+			echo "<p> <a href='layout.html'> INICIO </a></center>";
+			
 		
-			mysqli_close($conexion);
+			mysqli_close($mysqli);
+			
 		
-		}	
+		
+		} 	
 ?>
