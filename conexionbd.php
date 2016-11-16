@@ -1,6 +1,6 @@
 <?php
 
-        $HOSTINGER=0;
+        $HOSTINGER=1;
 	
 	if ($HOSTINGER==1)
         {

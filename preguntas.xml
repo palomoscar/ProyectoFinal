@@ -2,7 +2,7 @@
 <assessmentItems>
 	<assessmentItem complexity="2" subject="Las movidas de Adri">
 		<itemBody>
-			<p>¿QUE ES LO MEJOR DEL MUNDO?</p>
+			<p>&#xBF;QUE ES LO MEJOR DEL MUNDO?</p>
 		</itemBody>
 		<correctResponse>
 			<value>
@@ -12,12 +12,12 @@
 	</assessmentItem>
 		<assessmentItem complexity="4" subject="La higiene de Adri">
 		<itemBody>
-			<p>¿Cada cuanto se ducha Adrian?</p>
+			<p>&#xBF;Cada cuanto se ducha Adrian?</p>
 		</itemBody>
 		<correctResponse>
 			<value>
-				Cada año bisiesto
+				Cada a&#xF1;o bisiesto
 			</value>
 		</correctResponse>
 		</assessmentItem>
-</assessmentItems>
+<assessmentItem complexity="1" subject="prue as"><itemBody><p>probando ID</p></itemBody><correctResponse><value>a ver si funciona</value></correctResponse></assessmentItem></assessmentItems>

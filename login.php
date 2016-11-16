@@ -132,7 +132,8 @@
 				$_SESSION['pass'] = $password;
 				
 				if( strcmp($email, "web000@ehu.es") == 0){
-					header("location: RevisarPreguntas2.php");
+					
+					header("location: RevisarPreguntas.php");
 				}else{
 					header("location: GestionPreguntas.php");
 				}

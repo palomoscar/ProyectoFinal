@@ -1,19 +1,3 @@
-<!DOCTYPE HTML>
-
-<html>
-
-	
-			
-	</head>
-
-	<body>
-
-		<!--DIV PARA LA RESPUESTA DEL AJAX!-->
-		<div id = "divMail" ></div>
-		<div id = "divContrasenya" ></div> 
-	</body>
-</html>
-
 
 <!DOCTYPE html>
 <html>

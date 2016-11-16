@@ -1,24 +1,6 @@
 
-
-<script language="javascript">
-function mostarAjax(){
-    
- xmlhttp = new XMLHttpRequest();
- xmlhttp.onreadystatechange=function()
- {
- if (xmlhttp.readyState==4 && xmlhttp.status==200)
- {document.getElementById("mostrarform").innerHTML=xmlhttp.responseText; }
- }
-
- xmlhttp.open("GET","RevisarAjax.html?oldpregunta="+document.getElementById('desplegable').value,true); 
- xmlhttp.send();
- 
- 
- 
-}
-</script>
-
 <!DOCTYPE html>
+
 <html>
   <head>
   
@@ -47,6 +29,37 @@ function mostarAjax(){
         height:25px;
        }
 	</style>
+	<script>
+		function check(){
+				var elem = document.getElementById('desplegable');
+				var preg = document.getElementById('pregunta');
+				var res = document.getElementById('respuesta');
+				var tema = document.getElementById('tema');
+				var dif = document.getElementById('dificultad');
+			
+				var aviso = "Por favor, selecciona una pregunta para modificar";
+				var aviso2 = "Por favor, modifica alguno de los campos";
+				
+				var error = 0;
+				
+				if( elem.value == "0" ){
+					
+					alert(aviso);
+					
+					return false;
+					
+				}if( preg.value == "" && res.value == "" && tema.value == "" && dif.value == ""  ){
+					
+					alert(aviso2);
+					
+					return false;
+				
+				}
+
+				return true;
+			}
+	
+	</script>
   </head>
   <body>
 	<?php
@@ -55,13 +68,20 @@ function mostarAjax(){
 		
 		session_start();
 		
-		/*
-		
-		$usuario = $_SESSION['user'];
-		
-		$profesor = strcmp( $_SESSION['user'] ,"web000@ehu.es");
-		
-		if( !empty($usuario) && $profesor == 0 ){*/
+		if( !isset($_SESSION['user']) ){
+			header("location : login.php");
+			
+		}
+
+		if( empty($_SESSION['user']) ){//ANONIMO
+				
+				 header("location: login.php");
+				
+		}if( $_SESSION['user'] != "web000@ehu.es"){ //IKASLE
+				
+				header("location: GestionPreguntas.php");
+				
+		}
 			
 	?>
 	
@@ -69,7 +89,7 @@ function mostarAjax(){
 	<header class='main' id='h1'>
       		<span class="right"><a href="Logout.php">Logout</a></span>
 		<h2>Quiz: el juego de las preguntas</h2>
-		<p>Bienvenido de nuevo <?php $_SESSION['user'] ?></p>
+		<p>Bienvenido de nuevo <?php echo $_SESSION['user']; ?></p>
     </header>
 	<nav class='main' id='n1' role='navigation'>
 		<span><a href='layout.html'>Inicio</a></span>
@@ -87,22 +107,47 @@ function mostarAjax(){
 		$query= mysqli_query($mysqli,$dat);
 		
 		?>
-		<form name= "preguntas" id = "preguntas" >
+		<form name= "preguntas" id = "preguntas" action = "RevisarPreguntas.php" onSubmit = "return check()" method = "POST" >
 		
 		Selecciona una pregunta para editar: <select name= "desplegable" id = "desplegable" size="1">
+		<option value = "0" selected>Selecciona una pregunta</option>
 		<?php
-
+		
 		while( $lista = mysqli_fetch_array($query) ){
 			
-			echo "<option  value='".$lista['Pregunta']."'>".$lista["Pregunta"]."</option>"; 
+			echo "<option  value='".$lista['Id']."'>".$lista["Pregunta"]."</option>"; 
 		}
-
 		?>
 		</select>	
 		<br></br>
-		<p><input type="button" onClick=" mostarAjax()" class = "boton" value="Editar" ></input></p>
-		<br></br>
-		<div id = "mostrarform" name="mostrarform">
+		<center>
+		<table>
+		<tr>
+		<td>Nueva Pregunta : </td> <td> <TEXTAREA rows="3" cols="30" maxlength="50" id = "pregunta" name="pregunta"></TEXTAREA></td>
+		</tr>
+		<td></td><td></td>
+		<tr>
+		<td>Nueva Respuesta: </td> <td> <input type="text" id = "respuesta" name="respuesta" ></td>
+		</tr>
+		<td></td><td></td>
+		<tr>
+		<td>Nuevo Tema: </td> <td> <input type="text" id = "tema" name="tema"></td>
+		</tr>
+		<td></td><td></td>
+		<tr>
+		<td>Nuevo Grado de Dificultad : </td> <td> 
+		<select name="dificultad" id = "dificultad" size="1" >
+							<option value="0">Seleccione dificultad</option>
+						  	<option value="1">1</option>
+						    <option value="2">2</option>
+						    <option value="3">3</option>
+						    <option value="4">4</option>
+						    <option value="5">5</option>
+		</select></td>
+		</tr>
+		</table>
+		<br></br>		
+		<input type="submit" name="modificar"  class = "boton" value="Modificar" ></input>
 		
 		</div>
 		</form>
@@ -112,25 +157,89 @@ function mostarAjax(){
 		<p><a href="http://es.wikipedia.org/wiki/Quiz" target="_blank">Que es un Quiz?</a></p>
 		<a href='https://github.com'>Link GITHUB</a>
 	</footer>
-</div>
-
-	<?php
-	
-		/*}else{
-			
-			if( empty($usuario) ){
-				
-				header("location : login.php");
-				
-			}else{
-				
-				header("location : GestionPreguntas.php");
-				
-			}
-			
-		}*/
-	
-	?>
-	
+	</div>
+		
 </body>
 </html>
+<?php
+		 //hacer un query nuevo, asignar a estas variables y actualizar en los ifs
+
+		 
+	if ( isset( $_POST['desplegable'] ) ){
+
+		 
+		 if( $_POST['desplegable'] == 0){ 
+			 
+			 die('No has seleccionado una pregunta a modificar');
+			 //se supone que js nos lo hace tambien desde el cliente
+			 
+		 }
+		 
+		 //seleccionamos la pregunta elegida
+		 
+		$id = $_POST['desplegable'];
+		 
+		$str = " SELECT * FROM preguntas WHERE Id = '$id' ";
+		
+		$query2= mysqli_query($mysqli,$str);
+		
+		$lista2 = mysqli_fetch_array($query2);
+		
+		//asignamos las variables con los valores actuales de la base de datos
+		
+		$ikasle = $lista2['Email'];
+ 
+		$question = $lista2['Pregunta'];
+		
+		$answer = $lista2['Respuesta'];
+		
+		$topic = $lista2['Tema'];
+		
+		$dificulty = $lista2['Dificultad'];
+		
+		//ahora comprobamos si se han realizado cambios
+		
+		if(!empty($_POST['pregunta'])){
+			
+			$question = $_POST['pregunta']; 
+			
+		}if(!empty($_POST['respuesta'])){
+			
+			$answer = $_POST['respuesta'];
+			
+		}if(!empty($_POST['tema'])){
+			
+			$topic = $_POST['tema'];
+			
+		}if(!empty($_POST['dificultad'])){
+			
+			$dificulty = $_POST['dificultad'];
+			
+		}
+		
+		//haremos un update con las nuevas modificaciones
+		
+		$str3 = "UPDATE preguntas SET Pregunta='$question', Respuesta='$answer', Dificultad='$dificulty', Tema='$topic'  WHERE Id='$id'";
+		
+		$query3 = mysqli_query($mysqli,$str3);
+		
+		
+		if( $query3 === true){
+			
+			echo "<br></br>";
+			echo "<center>";
+			echo "Pregunta modificada con exito";
+			echo "</center>";
+
+		}else{
+			echo "<br></br>";
+			echo "<center>";
+			echo "No se ha podido modificar la pregunta";
+			echo "</center>";
+		}
+		
+	}//cierra el isset
+		
+	?>
+
+	

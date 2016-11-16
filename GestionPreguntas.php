@@ -10,7 +10,7 @@
 	<link rel='stylesheet' 
 		   type='text/css' 
 		   media='only screen and (min-width: 530px) and (min-device-width: 481px)'
-		   href='estilos/wide.css' />
+		   href='estilos/wide05.css' />
 	<link rel='stylesheet' 
 		   type='text/css' 
 		   media='only screen and (max-width: 480px)'
@@ -76,6 +76,7 @@
 	include("./conexionbd.php");
 	
 	$profusr = "web000@ehu.es" ;
+	
 	$cmp = strcmp($_SESSION['user'], $profusr ) ;
 	
 	if( isset( $_SESSION['user'] ) && $cmp != 0 ){
@@ -143,7 +144,7 @@
 		</tr>
 	
 	</table>
-
+		<br></br>
 		<input type="button" name="insertar"  class = "boton" value="Insertar" onClick=" insertarDatos()">
 		<input type="button" name="visualizar" class = "boton" value="Ver Preguntas" onClick="mostrarDatos()">
 		
@@ -164,7 +165,7 @@
 	}else{
 		 if( $cmp == 0){
 			 
-			 header("location: ./RevisarPreguntas.php"); /////TRAZAA
+			 header("location: ./RevisarPreguntas.php"); 
 			 
 		 }else{
 			 
