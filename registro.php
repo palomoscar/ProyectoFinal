@@ -19,7 +19,7 @@
         height:25px;
        }
 	</style>
-	<script src="http://swmiguel.esy.es/ProyectoQuiz/js/validaciones_cliente.js"></script>
+	<script src="./js/validaciones_cliente.js"></script>
 	<meta name="author" content="Oscar y Miguel">
 	<meta name="description" content="Formulario de registro de usuarios">
   
@@ -43,7 +43,7 @@
 		<h2>Quiz: el juego de las preguntas</h2>
     </header>
 	<nav class='main' id='n1' role='navigation'>
-		<span><a href='layout.html'>Inicio</a></span>
+		<span><a href='layout.php'>Inicio</a></span>
 		<span><a href='VerPreguntas.php'>Preguntas</a></span>
 		<span><a href='creditos.html'>Creditos</a></span>
 	</nav>
@@ -78,9 +78,10 @@
 				<tr>
 					<td>Sexo: </td> <td>
 					<select name="sexo" id = "sexo" size="1">
-					<option>Hombre</option>
-					<option>Mujer</option>
-					<option>Otro</option>
+					<option value = "0" selected>Selecciona tu sexo</option>
+					<option value = "Hombre">Hombre</option>
+					<option value = "Mujer">Mujer</option>
+					<option value = "Otro">Otro</option>
 					</select> </td>
 					<td>N&uacutemero de tel&eacutefono*:</td> <td>
 					<input type="number" id = "telf" name="telf" size="9"> </td>
@@ -88,9 +89,10 @@
 				<tr>
 				<td>Especialidad*: </td> <td>
 					<select name="esp"  id = "esp" size="1">
-					<option>Ing. del Software</option>
-					<option>Ing. de Computadores</option>
-					<option>Computaci&oacuten </option>
+					<option value = "0" selected>Selecciona una especialidad</option>
+					<option value = "Ing. del Software">Ing. del Software</option>
+					<option value = "Ing. de Computadores">Ing. de Computadores</option>
+					<option value = "Computacion">Computaci&oacuten </option>
 					</select> </td>
 				</tr>
 				<tr>
@@ -128,7 +130,7 @@
 
 	//las comprobaciones se haran una vez rellenados los campos
 
-	if( isset($_POST['nombre'])&& isset($_POST['apellidos']) && isset($_POST['nick'])&& isset($_POST['pass']) && isset($_POST['mail'])&& isset($_POST['telf']) && isset($_POST['sexo'])&& isset($_POST['esp']) ){
+	if( isset($_POST['nombre'])&& isset($_POST['apellidos']) && isset($_POST['nick'])&& isset($_POST['pass']) && isset($_POST['mail'])&& isset($_POST['telf']) ){
 	
 	include("./conexionbd.php");
 	
@@ -136,12 +138,29 @@
 	//extraemos los valores introducidos y los guardamos en variables para trabajar mas facil
 	
 		$nombre = $_POST['nombre'];
+		
 		$apellidos = $_POST['apellidos'];
+		
 		$nick = $_POST['nick'];
-		$pass = $_POST['pass'];
+		
+		$pass = sha1($_POST['pass']); //encriptamos la clave
+		
 		$mail = $_POST['mail'];
+		
+		$queryBloqueado = mysqli_query($mysqli, "SELECT * FROM blocked WHERE Email = '$mail' " );
+		
+		$resultado = mysqli_num_rows($queryBloqueado);
+		
+		if($resultado > 0){
+			
+			die("<center>Este email se encuentra bloqueado temporalmente</center>");
+		
+		}
+		
 		$telf = $_POST['telf'];
+		
 		$sexo = $_POST['sexo'];
+		
 		$esp = $_POST['esp'];
 	
 	///////////////////////////////////quitar los onchange////////////////////
@@ -151,7 +170,7 @@
 
 	$result1 = $soapclient1->call('comprobar', array('x'=>$_POST['mail']));
 
-	$soapclient2 = new nusoap_client("http://swmiguel.esy.es/ProyectoQuiz/ComprobarContrasenya.php?wsdl",true);
+	$soapclient2 = new nusoap_client("http://palomoymiguel.esy.es/Lab-8/ComprobarContrasenya.php?wsdl",true);
 
 	$result2 = $soapclient2->call('passVal', array('password'=>$_POST['pass']));
 	
@@ -159,7 +178,7 @@
 	
 		if( $result1 != "SI" ){
 		
-		 echo "<script languaje='javascript'>alert('DEBES ESTAR MATRICULAD PARA REGISTRARTE ')</script>";
+		 echo "<script languaje='javascript'>alert('DEBES ESTAR MATRICULADO PARA REGISTRARTE ')</script>";
 		 
 		 die('');
 		
@@ -167,7 +186,7 @@
 	
 		if( $result2 != "VALIDA"){
 		
-		echo "<script languaje='javascript'>alert('INTRODUZCA UNA CNTRASEÑA MAS SEGURA')</script>";
+		echo "<script languaje='javascript'>alert('INTRODUZCA UNA CONTRASEÑA MAS SEGURA')</script>";
 		 
 		die('');
 		
@@ -208,20 +227,7 @@
 			return $okay;
 		}
 		
-		
-		//AHORA SEGUIREMOS CON LAS LINEAS QUE SE EJECUTAN PARA REALIZAR LAS VALIDACIONES
-		
-		//VAMS A COMENTAR --> AHRA LO HACE EL SW!!!!!!!!
-		
-		/*if( !comprobarDatos() ){ // EN CASO DE ERRORES
-		
-			echo "El correo utilizado no es valido";
-		
-			echo "<p> <a href='registro.php'> Volver al registro </a>";
-			
-			die('Se ha abortado la ejecucion del programa' );
-		
-		}*/if( !comprobarPass()){
+		if( !comprobarPass()){
 		
 			echo "<p> <a href='registro.php'> Volver al registro </a>";
 			
@@ -245,7 +251,7 @@
 		
 			echo "<p> <a href='VerUsuarios.php'> VER USUARIOS </a>";
 			
-			echo "<p> <a href='layout.html'> INICIO </a></center>";
+			echo "<p> <a href='layout.php'> INICIO </a></center>";
 			
 		
 			mysqli_close($mysqli);

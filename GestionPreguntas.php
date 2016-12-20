@@ -10,7 +10,7 @@
 	<link rel='stylesheet' 
 		   type='text/css' 
 		   media='only screen and (min-width: 530px) and (min-device-width: 481px)'
-		   href='estilos/wide05.css' />
+		   href='estilos/wide3.css' />
 	<link rel='stylesheet' 
 		   type='text/css' 
 		   media='only screen and (max-width: 480px)'
@@ -105,8 +105,9 @@
 		<br></br>
 		<h2>Quiz: el juego de las preguntas</h2>
     </header>
+	
 	<nav class='main' id='n1' role='navigation'>
-		<span><a href='layout.html'>Inicio</a></span>
+		<span><a href='layout.php'>Inicio</a></span>
 		<span><a href='VerPreguntas.php'>Preguntas</a></span>
 		<span><a href='creditos.html'>Creditos</a></span>
 	</nav>
@@ -114,8 +115,10 @@
     
 	<div>
 	<form id = "form_pregunta" name = "form_pregunta" action = "InsertarAJAX.php" method="post">
+	
 	<legend><h3>A&ntildeade tu pregunta</h3></legend>
-	<fieldset>
+	<br></br>
+	
 	<center>
 	<table>
 		
@@ -145,19 +148,59 @@
 	
 	</table>
 		<br></br>
+		
 		<input type="button" name="insertar"  class = "boton" value="Insertar" onClick=" insertarDatos()">
-		<input type="button" name="visualizar" class = "boton" value="Ver Preguntas" onClick="mostrarDatos()">
+		<input type="button" name="visualizar" class = "boton" value="Preguntas XML" onClick="mostrarDatos()">
 		
 	</form>
 	
 	</div>
-    </section>
 	
+	<form>
+	
+		<?php
+		echo "<br></br>" ;
+		$logeduser = $_SESSION['user'];
+		$preguntas = mysqli_query($mysqli, "SELECT * FROM preguntas WHERE Email = '$logeduser' " ) or die('No se ha podido conectar a la BD');
+		
+		echo "<center>";
+		echo "<h3>Tus Preguntas</h3>";
+		echo "<br></br>";
+		echo '<table border=1> <tr> 
+		<th> Email </th>
+		<th> Pregunta </th>
+		<th> Respuesta </th>
+		<th> Dificultad </th>
+		</tr>';
+		
+		while( $row = mysqli_fetch_array($preguntas) ){
+			echo '<tr>
+					  <td>'.$row['Email'].'</td>
+					  <td>'.$row['Pregunta'].'</td>
+					  <td>'.$row['Respuesta'].'</td>
+					  <td>'.$row['Dificultad'].'</td>
+				 </tr>';
 			
+		}
+		echo '</table>';
+		
+		echo "<br></br>";
+		
+		echo " </hr> " ;
+		
+		echo "</center>";
+
+		mysqli_close( $mysqli );
+	?>
+		
 	<div id = "insercion"></div> <!-- EN ESTE TROZO DEBERIA APARECER LO DE AJAX-->
 	<center><div id = "visualizacion" ></div></center>
 	
-</div>
+	</form>
+    </section>
+
+
+
 
 	<?php
 	//en caso de que no hayamos establecido una session nos viene aqui

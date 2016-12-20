@@ -17,15 +17,26 @@
   <body>
   <div id='page-wrap'>
 	<header class='main' id='h1'>
-		<span class="right"><a href="registro.php">Registrarse</a></span>
-      		<span class="right"><a href="login.php">Login</a></span>
+	<?php session_start(); include("./conexionbd.php");
+		if( !isset($_SESSION['user'] ) ){
+			echo "<span class='right'><a href='registro.php'>Registrarse</a></span>";
+      		echo "<span class='right'><a href='login.php'>Login</a></span>";
+		}else{
+			
+			echo "<span class='right'><a href='Logout.php'>Logout</a></span>";
+		}
+	?>
 		<h2>Quiz: el juego de las preguntas</h2>
     </header>
 	<nav class='main' id='n1' role='navigation'>
 	
-		<?php if( !isset($_SESSION['user'] ){
+		<?php
+				
+				if( !isset($_SESSION['user'] )){
 			
-					echo "<span><a href='Jugar.php'>¿Cuanto sabes?Pruebame</a></span>";
+					$usertype = "anonimo";
+			
+					echo "<span><a href='portadaJuego.php'>¿Cuanto sabes?Pruebame</a></span>";
 					
 					echo "<span><a href='ModificarContrasenya.php'>Modificar Contrase&ntildea</a></span>";
 					
@@ -33,11 +44,15 @@
 					
 					if( $_SESSION['user'] == "web000@ehu.es"){
 						
+						$usertype = "profesor";
+						
 						echo "<span><a href='RevisarPreguntas.php'>RevisarPreguntas</a></span>";
 						
 						echo "<span><a href='GestionCuentas.php'>Gestion de Cuentas</a></span>";
 						
 					}else{
+						
+						$usertype = "alumno";
 						
 						echo "<span><a href='GestionPreguntas.php'>Gestionar Preguntas</a></span>";
 						
@@ -48,6 +63,18 @@
 		<span><a href='creditos.html'>Creditos</a></span>
 	</nav>
     <section class="main" id="s1">
+	
+	<?php 
+		if($usertype == "anonimo"){
+			
+			echo "<h3>Estas logeado como : ANONIMO</h3>";
+			
+		}else {
+			
+			echo "<h3>Estas logeado como : ".$_SESSION['user']."</h3>";
+			
+		}
+		?>
     
 	<div>
 	Bienvenidos a QUIZ, el juego de las preguntas.

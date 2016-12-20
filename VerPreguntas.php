@@ -26,7 +26,7 @@
 		<p><a href= "GestionPreguntas.php" target="_blank">Ingresa otra pregunta</a></p>
     </header>
 	<nav class='main' id='n1' role='navigation'>
-		<span><a href='layout.html'>Inicio</a></span>
+		<span><a href='layout.php'>Inicio</a></span>
 		<span><a href='creditos.html'>Creditos</a></span>
 	</nav>
     <section class="main" id="s1">
@@ -36,14 +36,13 @@
 	
 	<?php
 
-        include("./conexionbd.php");
+    include("./conexionbd.php");
 
 	$preguntas = mysqli_query($mysqli, "select * from preguntas" ) or die( mysql_error() );
 
 		echo '<table border=1> <tr> 
 		<th> Email </th>
 		<th> Pregunta </th>
-		<th> Respuesta </th>
 		<th> Dificultad </th>
 		</tr>';
 		
@@ -51,7 +50,6 @@
 			echo '<tr>
 					  <td>'.$row['Email'].'</td>
 					  <td>'.$row['Pregunta'].'</td>
-					  <td>'.$row['Respuesta'].'</td>
 					  <td>'.$row['Dificultad'].'</td>
 				 </tr>';
 			

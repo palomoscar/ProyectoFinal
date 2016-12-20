@@ -92,9 +92,10 @@
 		<p>Bienvenido de nuevo <?php echo $_SESSION['user']; ?></p>
     </header>
 	<nav class='main' id='n1' role='navigation'>
-		<span><a href='layout.html'>Inicio</a></span>
+		<span><a href='layout.php'>Inicio</a></span>
 		<span><a href='VerPreguntas.php'>Preguntas</a></span>
-		<span><a href='creditos.html'>Creditos</a></span>
+		<span><a href='bloqueados.php'>Cuentas bloqueadas</a></span>
+		<span><a href='GestionCuentas.php'>Gestion de Cuentas</a></span>
 	</nav>
     <section class="main" id="s1">
     

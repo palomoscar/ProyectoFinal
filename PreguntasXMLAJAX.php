@@ -1,9 +1,11 @@
 
 
 
-<?php 		 // ESTE ARCHIVO ES UNICAMENTE PARA MOSTRRA CON AJAX, YA QUE SI USAMOS
-			//MOSTRARPREGUNTASXML AL ESTAR DENTRO DEL LAYOUT CONTEXTUALIZADO SE VISUALIZA MUY FEO
+<?php 		
 			
+	echo "<h3>Preguntas XML</h3>";
+	
+	echo "<br></br>"; 
 	$preguntas = simplexml_load_file("preguntas.xml");
 
 	echo '<table border=1> <tr> 

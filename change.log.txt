@@ -1,0 +1,3 @@
+tengo un problema con el timer.
+quiero que si completo los 30s me marque como fallada la pregunta (fallos++) y que pasemos a la siguiente pregunta
+para ello hay que combinar el js con php y ajax (?)

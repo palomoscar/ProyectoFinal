@@ -1,10 +1,17 @@
 
 <!DOCTYPE html>
+
+<?php
+	include("./conexionbd.php");
+
+	session_start();
+
+?>
 <html>
   <head>
   
     <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
-	<title>LOGIN</title>
+	<title>Login</title>
     <link rel='stylesheet' type='text/css' href='estilos/style.css' />
 	<link rel='stylesheet' 
 		   type='text/css' 
@@ -37,7 +44,7 @@
 		<h2>Quiz: el juego de las preguntas</h2>
     </header>
 	<nav class='main' id='n1' role='navigation'>
-		<span><a href='layout.html'>Inicio</a></span>
+		<span><a href='layout.php'>Inicio</a></span>
 		<span><a href='VerPreguntas.php'>Preguntas</a></span>
 		<span><a href='creditos.html'>Creditos</a></span>
 	</nav>
@@ -48,8 +55,7 @@
 		<center>
 	
 		<h1>Acceso para Usuarios</h1>
-	
-	
+
 		<form  id = "login" name "login" action="login.php" method="post" >
 
 	
@@ -89,20 +95,9 @@
 
 <?php
 
-	//PRIMERO ESTABLECEREMOS LAS CONEXIONES	
+	if( isset( $_POST['username']) && isset( $_POST['pass'] ) ){
+			
 	
-		include("./conexionbd.php");
-
-		session_start();
-
-		if( empty($_POST['username']) || empty($_POST['pass']) ){
-		
-		die( '' );
-		
-		}
-		
-		
-		
 		function comprobarMail(){
 	
 		$patron_mail = '/^[a-zA-Z]+[0-9]{3}@ikasle.ehu.(es|eus)$/';	
@@ -111,48 +106,110 @@
 		
 		}
 		
-	
-		if( strcmp($_POST['username'], "web000@ehu.es") != 0 && !comprobarMail()  ){
-			
-			die("Error de identificacion, revisa los datos que has introducido");
+		//primero mirar si cumple la expresion 
 		
-		}	
-			$email =  $_POST['username'];
+		if( comprobarMail() || $_POST['username'] == "web000@ehu.es"){
 			
-			$pass = $_POST['pass'];
+			$email = $_POST['username'];
 			
-			$result = mysqli_query($mysqli, "SELECT * FROM usuario WHERE Email = '$email' AND Clave = '$pass'" );
+			$queryMail =  mysqli_query($mysqli, "SELECT * FROM usuario WHERE Email = '$email' ");
 			
-			$cont = mysqli_num_rows($result);
+			$resultMail = mysqli_num_rows($queryMail);
+			
+			if( $resultMail > 0 ){ //miramos si esta en la BD
+			
+				//mirar si la pass coincide con la de la BD
 				
-		if(  $cont > 0 ){ //si hay una o mas lineas que coincidan --> esta en la BD --> acierto
+				//si es profesor la clave no esta encriptada, si es usuario si
 				
-				$_SESSION['user'] = $email;
-			
-				$_SESSION['pass'] = $password;
+				$pass =  $_POST['pass'];
 				
-				if( strcmp($email, "web000@ehu.es") == 0){
+				if($_POST['username'] != "web000@ehu.es"){
 					
-					header("location: RevisarPreguntas.php");
-				}else{
-					header("location: GestionPreguntas.php");
+					$pass = sha1( $_POST['pass'] );
+					
 				}
 				
+				//hacer los querys
+				
+				$queryBloqueado = mysqli_query( $mysqli, "SELECT * FROM blocked WHERE Email = '$email' ");
+
+				$resultBloqueado  = mysqli_num_rows($queryBloqueado);
+							
+				if( $resultBloqueado > 0){//si esta en la BD de bloqueados die
+					
+					die('Su cuenta se encuentra bloqueada, pongase en contacto con el profesor');
+					
+				}
+				
+				$queryPass = mysqli_query($mysqli, "SELECT * FROM usuario WHERE Email = '$email' AND Clave = '$pass'" ); ;
+				
+				$resultPass = mysqli_num_rows($queryPass);
+				
+				if( $resultPass > 0 ){ //login correcto
+				
+					//iniciar la sesion y restablecer los intentos de la BD y finalmente redirigir
+					
+					$_SESSION['user'] = $email;
+					
+					$intentos = 0;
+					
+					$decrementar = mysqli_query($mysqli, "UPDATE usuario SET Intentos='$intentos' WHERE Email='$email'") or die('No se ha podido resetear los fallos en la BD');
+
+					if( $email == "web000@ehu.es" ){
+						
+						header("location: RevisarPreguntas.php");
+						
+					}else{
+						
+						header("location: GestionPreguntas.php");
+						
+					}			
+					
+				}else{ //le restamos un intento, si se queda en  0 bloquear+avisar
+							
+					$queryIntentos = mysqli_query($mysqli, "SELECT Intentos from usuario WHERE Email = '$email' " );
+					
+					$row = $queryIntentos ->fetch_row();					
+					
+					if( $row[0] < 4 ){ //fallamos la pass pero  aun nos quedan intentos <mal
+				
+						$intentos = $row[0]+1;
+			
+						$incrementar = mysqli_query($mysqli, "UPDATE usuario SET Intentos='$intentos' WHERE Email='$email'") or die('No se ha podido incrementar los fallos en la BD');
+					
+						$restantes = 3 - $intentos;
+					
+						echo "<center> $email , te quedan $restantes intentos </center>";
+					
+						if($restantes == 0){ //en caso de que alcancemos el tope de intentos
+				
+							$bloquear = "INSERT INTO blocked(Email, Indeseado) VALUES('$email', 'No') ";
+		
+							$queryBloquear = mysqli_query($mysqli, $bloquear);
+						
+							echo "<center>El email ha sido bloqueado hasta que el profesor lo decida. Motivo : Demasiados intentos fallidos</center>";
+		
+							die('');
+					
+						}
+					
+					die(''); //aunque queden intentos matamos para que vuelva a intentarlo
+					
+					}
+				}
+				
+				
+			}else{
+				
+				die('Debes estar registrado para poder entrar');
+			}
+			
 		}else{
 			
-			echo "<center>";
-			
-			echo "<p> <a href='layout.html'> INICIO </a>";
-			
-			echo "<br></br>";	
-			
-			die("Error de identificacion, revisa los datos introducidos");
-			
-			echo "</center>";
-			
-		
+			die('El email introducido no corresponde a la UPV');
 		}
+	}
 		
-		mysqli_close($mysqli);
 			
 ?>

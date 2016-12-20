@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 //incluimos la clase nusoap.php
 
@@ -7,7 +7,7 @@ require_once('lib/class.wsdlcache.php');
 
 //creamos el objeto de tipo soap_server --->>>>???????
 
-$ns="http://swmiguel.esy.es/ProyectoQuiz/samples";
+$ns="./samples";
 $server = new soap_server;
 $server->configureWSDL('passVal',$ns); 
 $server->wsdl->schemaTargetNamespace = $ns;
@@ -15,35 +15,25 @@ $server->wsdl->schemaTargetNamespace = $ns;
 
 //registramos la función que vamos a implementar
 
-$server->register('passVal', array('password'=>'xsd:String'), array('x'=>'xsd:String'), $ns); //la x ?
+$server->register('passVal'); 
 
 function passVal($password){
 	
-	$file = fopen("http://swmiguel.esy.es/ProyectoQuiz/toppasswords.txt", "r") or die("Error al abrir el fichero toppasswords.txt");
-	
-	$err = "INVALIDA";
-	
-	$val = "VALIDA";
-	
-	while(!feof($file)){
-		
-		$line = fgets($file);
-		
-		if ( (strcmp(substr($line, 0, strlen($line) - 2), $password) == 0)){ //hacemos aqui lo de la longitud asi luego evitamos la comprobacion 
-		//en el propio registro.php con js
-
-			//mirar si esta en toppasswords.txt
-			
-			fclose($file);
-			
-			return $err;
-			
-		}	
-	}
-	
-	fclose($file);
-	
-	return $val;
+	  $file = fopen("toppasswords.txt", "r") or die("Error de lectura en el fichero");
+	  
+        while(!feof($file))
+        {        
+                $line = fgets($file);
+				
+                if (strstr($line,$pass)){
+                
+					return "INVALIDA";
+                }        
+        }
+        
+        fclose($file);
+ 
+        return "VALIDA";
 }
 
 //nusoap service method
